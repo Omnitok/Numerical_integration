@@ -18,5 +18,9 @@ classifiers = [
 ]
 license = "MIT"
 
+[project.scripts]
+numinter = "numinter.cli:main"
+
+
 [project.urls]
 Homepage = "https://github.com/Omnitok/Numerical_integration"
