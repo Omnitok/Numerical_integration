@@ -16,6 +16,7 @@ def euler_de(x_dash, x0, t0, h, tn):
 
     return x,t
 
+
 def euler_de_2coupled(y_dash, x_dash, y0, x0, t0, h, tn):
     
     #intialize list with initial values
@@ -69,7 +70,7 @@ if __name__ == '__main__':
 
     z0 = 0
     y0 = 0
-    x0 = 1 ## Non-zero initial value
+    x0 = 0.99 ## Non-zero initial value
     t0 = 0
 
     h = 0.01
@@ -79,9 +80,10 @@ if __name__ == '__main__':
 
     # z, y, x, t = euler_de_2coupled(y_dash, x_dash, y0, x0, t0, h, tn)
 
-    # fig = plt.figure(figsize=(9, 6))
-    # ax = fig.add_subplot(111, projection='3d')
-    # ax.plot(t, x, y)
+    fig = plt.figure(figsize=(9, 6))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.plot(x, y, z)
+    plt.show()
 
 
     # plt.show()
