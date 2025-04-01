@@ -1,6 +1,6 @@
 import numpy as py
 
-def euler_backwards(y_dasj, y0, x0, h, xn):
+def euler_backwards(y_dash, y0, x0, h, xn):
     y = [y0]
     x = [x0]
     i = 0
