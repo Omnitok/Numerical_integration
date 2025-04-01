@@ -2,7 +2,4 @@ import argparse
 
 
 def main():
-    pass
-
-
-
+    parser = argparse.ArgumentParser(add_help=True)

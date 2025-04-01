@@ -2,12 +2,11 @@
 requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
 
-
 [project]
 name = "numinter"
 version = "0.0.1"
 authors = [
-  { name="Richard Johansson", email="richard.johansson@irf.se"},
+  { name="Richard Johansson", email="richard.johansson@irf.se" },
 ]
 description = "Numerical intergrator for ODE"
 readme = "README.md"
@@ -16,11 +15,9 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
-license = "MIT"
 
 [project.scripts]
 numinter = "numinter.cli:main"
-
 
 [project.urls]
 Homepage = "https://github.com/Omnitok/Numerical_integration"
