@@ -2,11 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-def euler_de(x_dash, x0, t0, h, tn):
+def euler_de(diff_equations, initial_condition, integration_settings):
 
-    #intialize list with initial values
-    x = [x0]
-    t = [t0]
+    x_dash = diff_equations
+    x, t = [initial_condition[0]], [initial_condition[1]]
+
+    h, tn = integration_settings
+
     i = 0
     #append lists
     while t[i] < tn:
@@ -17,13 +19,14 @@ def euler_de(x_dash, x0, t0, h, tn):
     return x,t
 
 
-def euler_de_2coupled(y_dash, x_dash, y0, x0, t0, h, tn):
-    
-    #intialize list with initial values
-    y = [y0]
-    x = [x0]
-    t = [t0]
+def euler_de_2coupled(diff_equations, initial_condition, integration_settings):
 
+    z_dash, y_dash, x_dash = diff_equations
+
+    y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]]
+
+    h, tn = integration_settings
+    
     i = 0
 
     #append lists
@@ -38,14 +41,14 @@ def euler_de_2coupled(y_dash, x_dash, y0, x0, t0, h, tn):
     return y,x,t
 
 
-def euler_de_3coupled(z_dash, y_dash, x_dash, z0, y0, x0, t0, h, tn):
-    
-    #intialize list with initial values
-    z = [z0]
-    y = [y0]
-    x = [x0]
-    t = [t0]
+def euler_de_3coupled(diff_equations, initial_condition, integration_settings):
 
+    z_dash, y_dash, x_dash = diff_equations
+
+    z, y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]], [initial_condition[3]]
+
+    h, tn = integration_settings
+    
     i = 0
 
     #append lists
@@ -59,6 +62,24 @@ def euler_de_3coupled(z_dash, y_dash, x_dash, z0, y0, x0, t0, h, tn):
         i+=1
 
     return z,y,x,t
+
+def euler_de(diff_equations, initial_condition, integration_settings):
+
+    if len(diff_equations)==3:
+        solution = euler_de_3coupled(diff_equations, initial_condition, integration_settings)
+
+    elif len(diff_equations)==2:
+        solution = euler_de_2coupled(diff_equations, initial_condition, integration_settings)
+
+    elif len(diff_equations)==1:
+        solution = euler_de_single(diff_equations, initial_condition, integration_settings)
+
+    else:
+        print('too many diff equations are coupled')
+
+    return solution
+
+
 
 if __name__ == '__main__':
 
@@ -76,9 +97,13 @@ if __name__ == '__main__':
     h = 0.01
     tn = 20
 
-    z, y, x, t = euler_de_3coupled(z_dash, y_dash, x_dash, z0, y0, x0, t0, h, tn)
+    initial_condition = (z0,y0,x0,t0)
+    diff_equations = (z_dash, y_dash, x_dash)
+    integration_settings = (h,tn)
 
-    # z, y, x, t = euler_de_2coupled(y_dash, x_dash, y0, x0, t0, h, tn)
+    solution = euler_de(diff_equations, initial_condition, integration_settings)
+
+    z, y, x, t = solution
 
     fig = plt.figure(figsize=(9, 6))
     ax = fig.add_subplot(111, projection='3d')
@@ -87,18 +112,5 @@ if __name__ == '__main__':
 
 
     # plt.show()
-
-
-    plt.plot(x,y)
-    plt.show()
-
-
-    plt.plot(x,z)
-    plt.show()
-
-
-    plt.plot(y,z)
-    plt.show()
-
 
 
