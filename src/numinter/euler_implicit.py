@@ -107,10 +107,12 @@ def euler_implicit_3coupled(diff_equations, initial_condition, integration_setti
 
 
         # Append it to solutions
-        z.append(x_curr)
-        x.append(y_curr)
-        y.append(z_curr)
+        x.append(x_curr)
+        y.append(y_curr)
+        z.append(z_curr)
+
         t.append(t[i]+h)
+
         i+=1
 
     return z,y,x,t
@@ -134,42 +136,38 @@ def euler_implicit(diff_equations, initial_condition, integration_settings):
 
 if __name__ == '__main__':
 
-    rho, sigma, beta = 28, 10, 8/3
+    x_dash = lambda t,x,y,z: -x
+    y_dash = lambda t,x,y,z: -2*y
+    z_dash = lambda t,x,y,z: -3*z
 
-    x_dash = lambda t,x,y,z: sigma*(y-x)
-    y_dash = lambda t,x,y,z: x*(rho-z) - y
-    z_dash = lambda t,x,y,z: x*y - beta*z
-
-    z0 = 0
-    y0 = 0
-    x0 = 0.99 ## Non-zero initial value
+    z0 = 1
+    y0 = 1
+    x0 = 1
     t0 = 0
 
-    h = 0.001
-    tn = 20
+    h = 0.1
+    tn = 5
 
-    initial_condition = (z0,y0,x0,t0)
+    initial_condition = (z0, y0, x0, t0)
     diff_equations = (z_dash, y_dash, x_dash)
-    integration_settings = (h,tn)
+    integration_settings = (h, tn)
+
+    fig = plt.figure(figsize=(9, 6))
+    ax = fig.add_subplot(111, projection='3d')
+
 
     z, y, x, t = euler_implicit(diff_equations, initial_condition, integration_settings)
 
 
-    fig = plt.figure(figsize=(9, 6))
-    ax = fig.add_subplot(111, projection='3d')
-    ax.plot(x, y, z)
+    ### Analytical solution to test
+    x_true = np.exp(-np.array(t))
+    y_true = np.exp(-2*np.array(t))
+    z_true = np.exp(-3*np.array(t))
+
+
+    ax.scatter(x, y, z, s=2, label='x numerical euler_implicit')
+    ax.plot(x_true, y_true, z_true, c= 'k', label='x analytical')
+
+
+    plt.legend()
     plt.show()
-
-    # x_dash = lambda t, x: t
-
-    # x0 = 0
-
-    # t0 = 0
-
-    # h = 0.01
-    # tn = 20
-
-    # x,t = euler_implicit(x_dash, x0, t0, h, tn)
-
-    # plt.plot(t,x)
-    # plt.show()
