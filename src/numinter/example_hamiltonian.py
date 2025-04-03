@@ -14,7 +14,7 @@ theta = np.pi * 5/6
 t0 = 0
 
 h = 0.001
-tn = 120
+tn = 20
 
 initial_condition = (p,theta,t0)
 diff_equations = (p_dash, theta_dash)
@@ -30,7 +30,7 @@ plt.scatter(x, y, s = 0.1, label = 'euler_explicit')
 
 y, x, t = solution_implicit
 
-plt.scatter(x, y, s = 0.1, label = 'euler_implicit')
+plt.scatter(x, y, s = 0.1, alpha=0.1, label = 'euler_implicit')
 
 plt.legend()
 plt.show()
