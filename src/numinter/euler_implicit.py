@@ -110,15 +110,23 @@ def euler_implicit_3coupled(z_dash, y_dash, x_dash, z0, y0, x0, t0, h, tn):
 
 if __name__ == '__main__':
 
-    x_dash = lambda t,x: t
+    rho, sigma, beta = 28, 10, 8/3
 
+    x_dash = lambda t,x,y,z: sigma*(y-x)
+    y_dash = lambda t,x,y,z: x*(rho-z) - y
+    z_dash = lambda t,x,y,z: x*y - beta*z
+
+    z0 = 0
+    y0 = 0
+    x0 = 0.99 ## Non-zero initial value
     t0 = 0
-    x0 = 0
 
-    h = 0.5
+    h = 0.01
     tn = 20
 
-    x,t = euler_implicit(x_dash, x0, t0, h, tn)
+    z, y, x, t = euler_implicit_3coupled(z_dash, y_dash, x_dash, z0, y0, x0, t0, h, tn)
 
-    plt.plot(t,x)
+    fig = plt.figure(figsize=(9, 6))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.plot(x, y, z)
     plt.show()
