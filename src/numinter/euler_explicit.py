@@ -2,9 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-def euler_de(diff_equations, initial_condition, integration_settings):
+def euler_explicit_single(diff_equations, initial_condition, integration_settings):
 
-    x_dash = diff_equations
+    x_dash = diff_equations[0]
     x, t = [initial_condition[0]], [initial_condition[1]]
 
     h, tn = integration_settings
@@ -19,9 +19,9 @@ def euler_de(diff_equations, initial_condition, integration_settings):
     return x,t
 
 
-def euler_de_2coupled(diff_equations, initial_condition, integration_settings):
+def euler_explicit_2coupled(diff_equations, initial_condition, integration_settings):
 
-    z_dash, y_dash, x_dash = diff_equations
+    y_dash, x_dash = diff_equations
 
     y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]]
 
@@ -34,14 +34,14 @@ def euler_de_2coupled(diff_equations, initial_condition, integration_settings):
 
         y.append(y[i] + h * y_dash(t[i], x[i], y[i]))
         x.append(x[i] + h * x_dash(t[i], x[i], y[i]))
-        t.append(t[i]+h)
+        t.append(t[i] + h)
 
         i+=1
 
     return y,x,t
 
 
-def euler_de_3coupled(diff_equations, initial_condition, integration_settings):
+def euler_explicit_3coupled(diff_equations, initial_condition, integration_settings):
 
     z_dash, y_dash, x_dash = diff_equations
 
@@ -63,16 +63,16 @@ def euler_de_3coupled(diff_equations, initial_condition, integration_settings):
 
     return z,y,x,t
 
-def euler_de(diff_equations, initial_condition, integration_settings):
+def euler_explicit(diff_equations, initial_condition, integration_settings):
 
     if len(diff_equations)==3:
-        solution = euler_de_3coupled(diff_equations, initial_condition, integration_settings)
+        solution = euler_explicit_3coupled(diff_equations, initial_condition, integration_settings)
 
     elif len(diff_equations)==2:
-        solution = euler_de_2coupled(diff_equations, initial_condition, integration_settings)
+        solution = euler_explicit_2coupled(diff_equations, initial_condition, integration_settings)
 
     elif len(diff_equations)==1:
-        solution = euler_de_single(diff_equations, initial_condition, integration_settings)
+        solution = euler_explicit_single(diff_equations, initial_condition, integration_settings)
 
     else:
         print('too many diff equations are coupled')
@@ -95,13 +95,13 @@ if __name__ == '__main__':
     t0 = 0
 
     h = 0.01
-    tn = 20
+    tn = 200
 
     initial_condition = (z0,y0,x0,t0)
     diff_equations = (z_dash, y_dash, x_dash)
     integration_settings = (h,tn)
 
-    solution = euler_de(diff_equations, initial_condition, integration_settings)
+    solution = euler_explicit(diff_equations, initial_condition, integration_settings)
 
     z, y, x, t = solution
 
