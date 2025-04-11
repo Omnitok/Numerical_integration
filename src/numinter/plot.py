@@ -1,9 +1,7 @@
 import matplotlib.pyplot as plt
-from random import randint
-import numpy as np
 
 def test():
-###### generate test data
+    from random import randint
     x = []
     y = []
     z = []
