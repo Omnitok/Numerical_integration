@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-<<<<<<< HEAD
 
 def test():
     from random import randint
