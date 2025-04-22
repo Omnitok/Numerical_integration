@@ -1,5 +1,5 @@
 import argparse
-from .parse import parse_setupfile, Path
+from .parse import parse_setupfile, Path, parse_inputfile
 from .locate import find_input_file
 from .custom_errors import MethodError
 # from .plot import plot_data
@@ -8,8 +8,8 @@ from .custom_errors import MethodError
 def main():
     """
     TODO:
-    1. functions for reading and parsing input file
-    2. module to handle saving and reading data
+    1. Functions for reading and parsing input file
+    2. Module to handle saving and reading data
     """
     setup = parse_setupfile()
     help = setup["help"]
@@ -35,6 +35,8 @@ def main():
     if extension in input_extension:
         if args.method in allowed_methods:
             file = find_input_file(args.input)
+            parse_inputfile(str(file))
+
             # parse_file
             # solve problem in file
             if args.save:

@@ -1,0 +1,6 @@
+variables: ["x", "y", "z"]
+equations:
+  - rhs: "10 * (y - x)"
+  - rhs: "x * (28 - z) - y"
+  - rhs: "x * y - 2.66666666667 * z"
+initials: [0.99, 0, 0, 0]
