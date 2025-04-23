@@ -1,5 +1,5 @@
 import argparse
-from .parse import parse_setupfile, Path
+from .parse import parse_setupfile, Path, parse_inputfile
 from .locate import find_input_file
 from .custom_errors import MethodError
 from .euler_explicit import euler_explicit
@@ -23,7 +23,7 @@ def main():
     help = setup["help"]
     allowed_methods = setup["allowed_methods"].values()
     data_extensions = setup["data_extensions"].values()
-    input_extension = setup["input_extension"].values()
+    input_extension = setup["input_extension"]["yaml"]
 
     parser = argparse.ArgumentParser(
         add_help=True, description=setup["desc"]["program"]
@@ -41,24 +41,18 @@ def main():
     extension = Path(args.input).suffix
 
     if extension in input_extension:
-        match extension:
-            case ".py":
-                file = find_input_file(args.input)
-                name = file.name
-                spec = importlib.util.spec_from_file_location(name, file)
-                system = importlib.util.module_from_spec(spec)
-                sys.modules[name] = system
-                spec.loader.exec_module(system)
-                eqs, inits = system.system()
-
         if args.method in allowed_methods:
-            solution = euler_explicit(
-                eqs,
-                inits,
-                (float(args.step), float(args.hs)),
-            )
-            z, y, x, t = solution
+            file = find_input_file(args.input)
+            print(file.suffix)
+            #spec = importlib.util.spec_from_file_location("lorenz_system", file_path)
+            #lorenz_system = importlib.util.module_from_spec(spec)
+            #sys.modules["lorenz_system"] = lorenz_system
+            #spec.loader.exec_module(lorenz_system)
 
+            #fig = plt.figure(figsize=(9, 6))
+            #ax = fig.add_subplot(111, projection="3d")
+            #ax.plot(x, y, z)
+            #plt.show()
 
             if args.save:
                 pass
