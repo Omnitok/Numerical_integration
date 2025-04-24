@@ -5,29 +5,28 @@ from mpl_toolkits.mplot3d import Axes3D
 def euler_implicit_single(diff_equations, initial_condition, integration_settings):
 
     x_dash = diff_equations[0]
-    x, t = [initial_condition[0]], [initial_condition[1]]
 
     h, tn, epsilon = integration_settings
+    x,t = np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1))
 
-    i = 0
+    x[0], t[0] = initial_condition[0], initial_condition[1]
 
     #append lists
-    while t[i] < tn:
+    for i in range(1,len(t)):
 
-        x_prev = x[i] ### Initial guess for fixed point iteration
+        x_prev = x[i-1] ### Initial guess for fixed point iteration
 
         #Outside the loop to get it started
-        x_curr = x_prev + h * x_dash(t[i]+h, x_prev)
+        x_curr = x_prev + h * x_dash(t[i-1]+h, x_prev)
 
         #Fixed point iteration
         while np.abs(x_curr - x_prev) > epsilon:
             x_prev = x_curr
-            x_curr = x[i] + h * x_dash(t[i]+h, x_prev)
+            x_curr = x[i-1] + h * x_dash(t[i-1]+h, x_prev)
 
         # Append it to solutions
-        x.append(x_curr)
-        t.append(t[i]+h)
-        i+=1
+        x[i] = x_curr
+        t[i] = t[i-1]+h
 
     return x,t
 
@@ -35,21 +34,21 @@ def euler_implicit_2coupled(diff_equations, initial_condition, integration_setti
 
     y_dash, x_dash = diff_equations
 
-    y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]]
-
     h, tn, epsilon = integration_settings
-    
-    i = 0
+    y, x, t = np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1))
+
+    y[0], x[0], t[0] = initial_condition[0], initial_condition[1], initial_condition[2]
+
 
     #append lists
-    while t[i] < tn:
+    for i in range(1,len(t)):
 
-        x_prev = x[i] ### Initial guess for fixed point iteration
-        y_prev = y[i] ### Initial guess for fixed point iteration
+        x_prev = x[i-1] ### Initial guess for fixed point iteration
+        y_prev = y[i-1] ### Initial guess for fixed point iteration
 
         #Outside the loop to get it started
-        x_curr = x_prev + h * x_dash(t[i]+h, x_prev, y_prev)
-        y_curr = y_prev + h * y_dash(t[i]+h, x_prev, y_prev)
+        x_curr = x_prev + h * x_dash(t[i-1]+h, x_prev, y_prev)
+        y_curr = y_prev + h * y_dash(t[i-1]+h, x_prev, y_prev)
 
         #Fixed point iteration
         ## Might not stuck?
@@ -58,41 +57,39 @@ def euler_implicit_2coupled(diff_equations, initial_condition, integration_setti
             x_prev = x_curr
             y_prev = y_curr
 
-            x_curr = x[i] + h * x_dash(t[i]+h, x_prev, y_prev)
-            y_curr = y[i] + h * y_dash(t[i]+h, x_prev, y_prev)
+            x_curr = x[i-1] + h * x_dash(t[i-1]+h, x_prev, y_prev)
+            y_curr = y[i-1] + h * y_dash(t[i-1]+h, x_prev, y_prev)
 
 
         # Append it to solutions
-        x.append(x_curr)
-        y.append(y_curr)
-        t.append(t[i]+h)
-
-        i+=1
+        x[i] = x_curr
+        y[i] = y_curr
+        t[i] = t[i-1]+h
 
     return y,x,t
 
 def euler_implicit_3coupled(diff_equations, initial_condition, integration_settings):
 
     z_dash, y_dash, x_dash = diff_equations
-
-    z, y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]], [initial_condition[3]]
-
     h, tn, epsilon = integration_settings
 
-    i = 0
+    z, y, x, t = np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1))
+
+    z[0], y[0], x[0], t[0] = initial_condition[0], initial_condition[1], initial_condition[2], initial_condition[3]
+
 
     #append lists
-    while t[i] < tn:
+    for i in range(1,len(t)):
 
-        x_prev = x[i] ### Initial guess for fixed point iteration
-        y_prev = y[i] ### Initial guess for fixed point iteration
-        z_prev = z[i] ### Initial guess for fixed point iteration
+        x_prev = x[i-1] ### Initial guess for fixed point iteration
+        y_prev = y[i-1] ### Initial guess for fixed point iteration
+        z_prev = z[i-1] ### Initial guess for fixed point iteration
 
 
         #Outside the loop to get it started
-        x_curr = x_prev + h * x_dash(t[i]+h, x_prev, y_prev, z_prev)
-        y_curr = y_prev + h * y_dash(t[i]+h, x_prev, y_prev, z_prev)
-        z_curr = z_prev + h * z_dash(t[i]+h, x_prev, y_prev, z_prev)
+        x_curr = x_prev + h * x_dash(t[i-1]+h, x_prev, y_prev, z_prev)
+        y_curr = y_prev + h * y_dash(t[i-1]+h, x_prev, y_prev, z_prev)
+        z_curr = z_prev + h * z_dash(t[i-1]+h, x_prev, y_prev, z_prev)
 
         ## Might not stuck?
         while np.abs(x_curr - x_prev) > epsilon or np.abs(y_curr - y_prev) > epsilon or np.abs(z_curr - z_prev) > epsilon:
@@ -101,19 +98,17 @@ def euler_implicit_3coupled(diff_equations, initial_condition, integration_setti
             y_prev = y_curr
             z_prev = z_curr
 
-            x_curr = x[i] + h * x_dash(t[i]+h, x_prev, y_prev, z_prev)
-            y_curr = y[i] + h * y_dash(t[i]+h, x_prev, y_prev, z_prev)
-            z_curr = z[i] + h * z_dash(t[i]+h, x_prev, y_prev, z_prev)
+            x_curr = x[i-1] + h * x_dash(t[i-1]+h, x_prev, y_prev, z_prev)
+            y_curr = y[i-1] + h * y_dash(t[i-1]+h, x_prev, y_prev, z_prev)
+            z_curr = z[i-1] + h * z_dash(t[i-1]+h, x_prev, y_prev, z_prev)
 
 
         # Append it to solutions
-        x.append(x_curr)
-        y.append(y_curr)
-        z.append(z_curr)
+        x[i] = x_curr
+        y[i] = y_curr
+        z[i] = z_curr
 
-        t.append(t[i]+h)
-
-        i+=1
+        t[i] = t[i-1]+h
 
     return z,y,x,t
 

@@ -5,16 +5,19 @@ from mpl_toolkits.mplot3d import Axes3D
 def euler_explicit_single(diff_equations, initial_condition, integration_settings):
 
     x_dash = diff_equations[0]
-    x, t = [initial_condition[0]], [initial_condition[1]]
 
     h, tn, _ = integration_settings
 
-    i = 0
+    x,t = np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1))
+
+    x[0], t[0] = initial_condition[0], initial_condition[1]
+
+
     #append lists
-    while t[i] < tn:
-        x.append(x[i] + h * x_dash(t[i], x[i]))
-        t.append(t[i]+h)
-        i+=1
+    for i in range(1,len(t)):
+        x[i] = x[i-1] + h * x_dash(t[i-1], x[i-1])
+        t[i] = t[i] + h
+
 
     return x,t
 
@@ -23,20 +26,19 @@ def euler_explicit_2coupled(diff_equations, initial_condition, integration_setti
 
     y_dash, x_dash = diff_equations
 
-    y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]]
-
     h, tn, _ = integration_settings
-    
-    i = 0
 
-    #append lists
-    while t[i] < tn:
+    y,x,t = np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1))
 
-        y.append(y[i] + h * y_dash(t[i], x[i], y[i]))
-        x.append(x[i] + h * x_dash(t[i], x[i], y[i]))
-        t.append(t[i] + h)
 
-        i+=1
+    y[0], x[0], t[0] = initial_condition[0], initial_condition[1], initial_condition[2]
+
+
+    for i in range(1,len(t)):
+
+        y[i] = y[i-1] + h * y_dash(t[i-1], x[i-1], y[i-1])
+        x[i] = x[i-1] + h * x_dash(t[i-1], x[i-1], y[i-1])        
+        t[i] = t[i] + h
 
     return y,x,t
 
@@ -45,21 +47,20 @@ def euler_explicit_3coupled(diff_equations, initial_condition, integration_setti
 
     z_dash, y_dash, x_dash = diff_equations
 
-    z, y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]], [initial_condition[3]]
-
     h, tn, _ = integration_settings
-    
-    i = 0
-    
-    #append lists
-    while t[i] < tn:
 
-        z.append(z[i] + h * z_dash(t[i], x[i], y[i], z[i]))    
-        y.append(y[i] + h * y_dash(t[i], x[i], y[i], z[i]))
-        x.append(x[i] + h * x_dash(t[i], x[i], y[i], z[i]))
-        t.append(t[i]+h)
+    z, y ,x ,t = np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1))
 
-        i+=1
+    z[0], y[0], x[0], t[0] = initial_condition[0], initial_condition[1], initial_condition[2], initial_condition[3]
+
+    
+    for i in range(1,len(t)):
+
+        z[i] = z[i-1] + h * z_dash(t[i-1], x[i-1], y[i-1], z[i-1])    
+        y[i] = y[i-1] + h * y_dash(t[i-1], x[i-1], y[i-1], z[i-1])
+        x[i] = x[i-1] + h * x_dash(t[i-1], x[i-1], y[i-1], z[i-1])
+        t[i] = t[i] + h
+
 
     return z,y,x,t
 
@@ -105,6 +106,8 @@ if __name__ == '__main__':
     solution = euler_explicit(diff_equations, initial_condition, integration_settings)
 
     z, y, x, t = solution
+
+    print(type(z))
 
     fig = plt.figure(figsize=(9, 6))
     ax = fig.add_subplot(111, projection='3d')
