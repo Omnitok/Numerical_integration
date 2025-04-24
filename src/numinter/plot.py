@@ -56,7 +56,6 @@ def plot_data(x, y, t, z=None):
             frames.append(imageio.imread(buf))
             buf.close()
             plt.close(fig)
-
         imageio.mimsave("test3d.gif", frames, duration=1, loop=0)
 
 ############ TEST the plots
