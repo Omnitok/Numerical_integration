@@ -1,5 +1,5 @@
 from pathlib import Path
-from hashlib import sha256
+from .custom_errors import DirectoryNotFoundError
 
 
 def find_input_file(filename: str) -> Path:
@@ -40,17 +40,20 @@ def find_setup() -> Path:
     raise FileNotFoundError("'setup.cfg' can not be found")
 
 
-def hashval(file: Path) -> str:
-    """Function to hash file content with sha256
-
-
-    Args:
-        file: Path to the file that should be hashed
+def find_output_file() -> Path:
+    """Function to locate output directory
 
     Returns:
-        Hash value of the content
+        Path to output directory
+
+    Raises:
+        DirectoryNotFoundError: Raised if directory can not be found
     """
-    hasher = sha256()
-    content = file.read_bytes()
-    hasher.update(content)
-    return hasher.hexdigest()
+    cwd = Path(__file__)
+    outputdir = "outputs"
+
+    for parent in cwd.parents:
+        output_path = parent / outputdir
+        if output_path.exists():
+            return output_path
+    raise DirectoryNotFoundError("output directory can not be located")

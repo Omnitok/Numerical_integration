@@ -51,11 +51,6 @@ def euler_explicit_3coupled(diff_equations, initial_condition, integration_setti
     
     i = 0
     
-    print(t, tn)
-    print(z, y, x, t)
-    
-
-
     #append lists
     while t[i] < tn:
 

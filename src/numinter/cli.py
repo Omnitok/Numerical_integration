@@ -1,6 +1,7 @@
 import argparse
 from .parse import parse_setupfile, Path
-from .locate import find_input_file
+from .locate import find_input_file, find_output_file
+from .save_data import save_hdf
 from .custom_errors import MethodError
 from .euler_explicit import euler_explicit
 from .euler_implicit import euler_implicit
@@ -12,11 +13,15 @@ import sys
 METHOD_MAP = {"euler_explicit": euler_explicit,
               "euler_implicit": euler_implicit}
 
+SAVE_MAP = {
+    #"csv": save_csv,
+    ".hdf5": save_hdf
+}
+
 
 def main():
     """
     TODO:
-    1. Functions for reading and parsing input file
     2. Module to handle saving and reading data
     """
     setup = parse_setupfile()
@@ -32,9 +37,11 @@ def main():
     parser.add_argument(
         "--method", type=str, help=help["method"], default="euler_explicit"
     )
-    parser.add_argument("--step", type=str, help=help["step"], default=0.01)
-    parser.add_argument("--hs", type=str, help=help["hs"], default=20)
+    parser.add_argument("--step", type=float, help=help["step"], default=0.01)
+    parser.add_argument("--hs", type=float, help=help["hs"], default=20)
+    parser.add_argument("--epsilon", type=float, default=0.1)
     parser.add_argument("--save", action="store_true", help=help["save"])
+    parser.add_argument("--savename", type=str, default="unnamed.hdf5")
     parser.add_argument("--plot", action="store_true", help=help["plot"])
 
     args = parser.parse_args()
@@ -52,20 +59,24 @@ def main():
                 eqs, inits = system.system()
 
         if args.method in allowed_methods:
-            solution = euler_explicit(
+            func = METHOD_MAP[args.method]
+            solution = func(
                 eqs,
                 inits,
-                (float(args.step), float(args.hs)),
+                (args.step, args.hs),
             )
-            z, y, x, t = solution
-
 
             if args.save:
-                pass
-                # save file
+                save_format = "." + args.savename.split(".")[-1]
+                if save_format in data_extensions:
+                    outputdir = find_output_file()
+                    filename = outputdir / args.savename
+                    func = SAVE_MAP[save_format]
+                    func(filename, *solution)
+
             if args.plot:
                 pass
-                # plot data
+                # plot
         else:
             raise MethodError(
                 f"{args.method} not implemented. See -h for allowed methods"
@@ -79,7 +90,6 @@ def main():
         pass
     else:
         raise FileNotFoundError(
-            f"File {
-                args.input
-            } does not conform to the file extensions allowed. See -h for allowed file extensions"
+            f"File {args.input} does not conform to the file extensions \
+            allowed. See -h for allowed file extensions"
         )
