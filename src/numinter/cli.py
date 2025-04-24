@@ -54,14 +54,11 @@ def main():
                 system = importlib.util.module_from_spec(spec)
                 sys.modules[name] = system
                 spec.loader.exec_module(system)
-                system_of_eqs = system.system()
+                input = system.system()
 
         if args.method in allowed_methods:
             func = METHOD_MAP[args.method]
-            solution = func(
-                system_of_eqs,
-                (args.step, args.hs, args.epsilon),
-            )
+            solution = func(input, (args.step, args.hs, args.epsilon))
 
             if args.save:
                 save_format = "." + args.savename.split(".")[-1]
@@ -69,7 +66,7 @@ def main():
                     outputdir = find_output_file()
                     filename = outputdir / args.savename
                     func = SAVE_MAP[save_format]
-                    func(filename, *solution)
+                    func(filename, solution)
 
             if args.plot:
                 pass
