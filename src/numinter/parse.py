@@ -1,4 +1,4 @@
-from .locate import find_setup, find_input_file, Path
+from .locate import find_setup, Path
 from configparser import ConfigParser
 
 
@@ -17,5 +17,9 @@ def parse_setupfile() -> ConfigParser:
     return setup
 
 
-def parse_inputfile(file: Path):
+def parse_yaml(file: Path):
+    """
+    Function to parse yaml files,
+    not implemented yet
+    """
     pass
