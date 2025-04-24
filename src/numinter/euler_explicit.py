@@ -16,7 +16,7 @@ def euler_explicit_single(diff_equations, initial_condition, integration_setting
     #append lists
     for i in range(1,len(t)):
         x[i] = x[i-1] + h * x_dash(t[i-1], x[i-1])
-        t[i] = t[i] + h
+        t[i] = t[i-1] + h
 
 
     return x,t
@@ -38,7 +38,7 @@ def euler_explicit_2coupled(diff_equations, initial_condition, integration_setti
 
         y[i] = y[i-1] + h * y_dash(t[i-1], x[i-1], y[i-1])
         x[i] = x[i-1] + h * x_dash(t[i-1], x[i-1], y[i-1])        
-        t[i] = t[i] + h
+        t[i] = t[i-1] + h
 
     return y,x,t
 
@@ -59,7 +59,7 @@ def euler_explicit_3coupled(diff_equations, initial_condition, integration_setti
         z[i] = z[i-1] + h * z_dash(t[i-1], x[i-1], y[i-1], z[i-1])    
         y[i] = y[i-1] + h * y_dash(t[i-1], x[i-1], y[i-1], z[i-1])
         x[i] = x[i-1] + h * x_dash(t[i-1], x[i-1], y[i-1], z[i-1])
-        t[i] = t[i] + h
+        t[i] = t[i-1] + h
 
 
     return z,y,x,t
