@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-
 def test():
     from random import randint
     x = []
@@ -60,4 +59,3 @@ def plot_data(x, y, t, z=None):
 
 ############ TEST the plots
 #plot_data(*test())
-
