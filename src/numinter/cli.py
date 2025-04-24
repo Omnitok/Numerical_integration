@@ -5,16 +5,14 @@ from .save_data import save_hdf
 from .custom_errors import MethodError
 from .euler_explicit import euler_explicit
 from .euler_implicit import euler_implicit
-import matplotlib.pyplot as plt
 import importlib.util
 import sys
 # from .plot import plot_data
 
-METHOD_MAP = {"euler_explicit": euler_explicit,
-              "euler_implicit": euler_implicit}
+METHOD_MAP = {"euler_explicit": euler_explicit, "euler_implicit": euler_implicit}
 
 SAVE_MAP = {
-    #"csv": save_csv,
+    # "csv": save_csv,
     ".hdf5": save_hdf
 }
 
@@ -56,14 +54,13 @@ def main():
                 system = importlib.util.module_from_spec(spec)
                 sys.modules[name] = system
                 spec.loader.exec_module(system)
-                eqs, inits = system.system()
+                system_of_eqs = system.system()
 
         if args.method in allowed_methods:
             func = METHOD_MAP[args.method]
             solution = func(
-                eqs,
-                inits,
-                (args.step, args.hs),
+                system_of_eqs,
+                (args.step, args.hs, args.epsilon),
             )
 
             if args.save:
