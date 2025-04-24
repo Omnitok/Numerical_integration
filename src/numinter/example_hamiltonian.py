@@ -15,10 +15,11 @@ t0 = 0
 
 h = 0.001
 tn = 20
+epsilon = 0.1
 
 initial_condition = (p,theta,t0)
 diff_equations = (p_dash, theta_dash)
-integration_settings = (h,tn)
+integration_settings = (h,tn,epsilon)
 
 solution_explicit = euler_explicit.euler_explicit(diff_equations, initial_condition, integration_settings)
 

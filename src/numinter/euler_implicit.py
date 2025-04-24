@@ -7,7 +7,7 @@ def euler_implicit_single(diff_equations, initial_condition, integration_setting
     x_dash = diff_equations[0]
     x, t = [initial_condition[0]], [initial_condition[1]]
 
-    h, tn = integration_settings
+    h, tn, epsilon = integration_settings
 
     i = 0
 
@@ -20,7 +20,7 @@ def euler_implicit_single(diff_equations, initial_condition, integration_setting
         x_curr = x_prev + h * x_dash(t[i]+h, x_prev)
 
         #Fixed point iteration
-        while np.abs(x_curr - x_prev) > 0.1:
+        while np.abs(x_curr - x_prev) > epsilon:
             x_prev = x_curr
             x_curr = x[i] + h * x_dash(t[i]+h, x_prev)
 
@@ -37,7 +37,7 @@ def euler_implicit_2coupled(diff_equations, initial_condition, integration_setti
 
     y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]]
 
-    h, tn = integration_settings
+    h, tn, epsilon = integration_settings
     
     i = 0
 
@@ -53,7 +53,7 @@ def euler_implicit_2coupled(diff_equations, initial_condition, integration_setti
 
         #Fixed point iteration
         ## Might not stuck?
-        while np.abs(x_curr - x_prev) > 0.1 or np.abs(y_curr - y_prev) > 0.1:
+        while np.abs(x_curr - x_prev) > epsilon or np.abs(y_curr - y_prev) > epsilon:
             
             x_prev = x_curr
             y_prev = y_curr
@@ -77,7 +77,7 @@ def euler_implicit_3coupled(diff_equations, initial_condition, integration_setti
 
     z, y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]], [initial_condition[3]]
 
-    h, tn = integration_settings
+    h, tn, epsilon = integration_settings
 
     i = 0
 
@@ -95,7 +95,7 @@ def euler_implicit_3coupled(diff_equations, initial_condition, integration_setti
         z_curr = z_prev + h * z_dash(t[i]+h, x_prev, y_prev, z_prev)
 
         ## Might not stuck?
-        while np.abs(x_curr - x_prev) > 0.1 or np.abs(y_curr - y_prev) > 0.1 or np.abs(z_curr - z_prev) > 0.1:
+        while np.abs(x_curr - x_prev) > epsilon or np.abs(y_curr - y_prev) > epsilon or np.abs(z_curr - z_prev) > epsilon:
             
             x_prev = x_curr
             y_prev = y_curr
@@ -147,10 +147,11 @@ if __name__ == '__main__':
 
     h = 0.1
     tn = 5
+    epsilon = 0.1
 
     initial_condition = (z0, y0, x0, t0)
     diff_equations = (z_dash, y_dash, x_dash)
-    integration_settings = (h, tn)
+    integration_settings = (h, tn, epsilon)
 
     fig = plt.figure(figsize=(9, 6))
     ax = fig.add_subplot(111, projection='3d')

@@ -16,10 +16,11 @@ t0 = 0
 
 h = 0.0001
 tn = 20
+epsilon = 0.1
 
 initial_condition = (z0,y0,x0,t0)
 diff_equations = (z_dash, y_dash, x_dash)
-integration_settings = (h,tn)
+integration_settings = (h,tn, epsilon)
 
 
 fig = plt.figure(figsize=(9, 6))

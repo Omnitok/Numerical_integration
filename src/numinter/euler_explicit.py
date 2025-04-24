@@ -7,7 +7,7 @@ def euler_explicit_single(diff_equations, initial_condition, integration_setting
     x_dash = diff_equations[0]
     x, t = [initial_condition[0]], [initial_condition[1]]
 
-    h, tn = integration_settings
+    h, tn, _ = integration_settings
 
     i = 0
     #append lists
@@ -25,7 +25,7 @@ def euler_explicit_2coupled(diff_equations, initial_condition, integration_setti
 
     y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]]
 
-    h, tn = integration_settings
+    h, tn, _ = integration_settings
     
     i = 0
 
@@ -47,7 +47,7 @@ def euler_explicit_3coupled(diff_equations, initial_condition, integration_setti
 
     z, y, x, t = [initial_condition[0]], [initial_condition[1]], [initial_condition[2]], [initial_condition[3]]
 
-    h, tn = integration_settings
+    h, tn, _ = integration_settings
     
     i = 0
 
@@ -96,10 +96,11 @@ if __name__ == '__main__':
 
     h = 0.01
     tn = 200
+    epsilon = 0.1
 
     initial_condition = (z0,y0,x0,t0)
     diff_equations = (z_dash, y_dash, x_dash)
-    integration_settings = (h,tn)
+    integration_settings = (h,tn, epsilon)
 
     solution = euler_explicit(diff_equations, initial_condition, integration_settings)
 

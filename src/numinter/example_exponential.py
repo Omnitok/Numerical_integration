@@ -13,10 +13,11 @@ t0 = 0
 
 h = 0.01
 tn = 20
+epsilon = 0.1
 
 initial_condition = (y0,x0,t0)
 diff_equations = [y_dash, x_dash]
-integration_settings = (h,tn)
+integration_settings = (h,tn,epsilon)
 
 solution_explicit = euler_explicit.euler_explicit(diff_equations, initial_condition, integration_settings)
 y, x, t = solution_explicit
