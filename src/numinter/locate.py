@@ -40,7 +40,7 @@ def find_setup() -> Path:
     raise FileNotFoundError("'setup.cfg' can not be found")
 
 
-def find_output_file() -> Path:
+def find_outputdir() -> Path:
     """Function to locate output directory
 
     Returns:
@@ -57,3 +57,21 @@ def find_output_file() -> Path:
         if output_path.exists():
             return output_path
     raise DirectoryNotFoundError("output directory can not be located")
+
+
+def find_outputfile(filename: str):
+    """Function to find output file
+
+    Args:
+        filename: Name of the output file
+
+    Raises:
+        FileNotFoundError: Raise if file can not be found in
+            output directory
+    """
+    outputdir = find_outputdir()
+    outputfile = outputdir / filename
+
+    if outputfile.exists():
+        return outputfile
+    raise FileNotFoundError(f"can not find {filename}")
