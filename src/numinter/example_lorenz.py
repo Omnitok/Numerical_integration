@@ -14,27 +14,41 @@ y0 = 0
 x0 = 0.9 ## Non-zero initial value
 t0 = 0
 
+input_dict = {
+    "x": {"differential": x_dash, "initial": x0},
+    "y": {"differential": y_dash, "initial": y0},
+    "z": {"differential": z_dash, "initial": z0},    
+    "t": {"initial": t0}
+}
+
 h = 0.0001
 tn = 20
 epsilon = 0.1
 
-initial_condition = (z0,y0,x0,t0)
-diff_equations = (z_dash, y_dash, x_dash)
+
 integration_settings = (h,tn, epsilon)
 
 
 fig = plt.figure(figsize=(9, 6))
 ax = fig.add_subplot(111, projection='3d')
 
-solution_explicit = euler_explicit.euler_explicit(diff_equations, initial_condition, integration_settings)
+output_dict_explicit = euler_explicit.euler_explicit(input_dict, integration_settings)
 
-z, y, x, t = solution_explicit
+x = output_dict_explicit["x"]["solution"]
+z = output_dict_explicit["z"]["solution"]
+y = output_dict_explicit["y"]["solution"]
+t = output_dict_explicit["t"]["solution"]
+
 ax.plot(x, y, z, label='euler_explicit')
 
 
-solution_implicit = euler_implicit.euler_implicit(diff_equations, initial_condition, integration_settings)
+output_dict_implicit = euler_implicit.euler_implicit(input_dict, integration_settings)
 
-z, y, x, t = solution_implicit
+x = output_dict_implicit["x"]["solution"]
+z = output_dict_implicit["z"]["solution"]
+y = output_dict_implicit["y"]["solution"]
+t = output_dict_implicit["t"]["solution"]
+
 ax.plot(x, y, z, label = 'euler_implicit')
 
 plt.legend()

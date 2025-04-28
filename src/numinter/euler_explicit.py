@@ -2,15 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-def euler_explicit_single(diff_equations, initial_condition, integration_settings):
-
-    x_dash = diff_equations[0]
+def euler_explicit_single(input_dict, integration_settings):
 
     h, tn, _ = integration_settings
+    x, t = np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1))
 
-    x,t = np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1))
-
-    x[0], t[0] = initial_condition[0], initial_condition[1]
+    x_dash = input_dict["x"]["differential"]
+    x[0], t[0] = input_dict["x"]["initial"], input_dict["t"]["initial"]
 
 
     #append lists
@@ -18,20 +16,19 @@ def euler_explicit_single(diff_equations, initial_condition, integration_setting
         x[i] = x[i-1] + h * x_dash(t[i-1], x[i-1])
         t[i] = t[i-1] + h
 
+    input_dict["x"]["solution"] = x
+    input_dict["t"]["solution"] = t
 
-    return x,t
+    return input_dict
 
 
-def euler_explicit_2coupled(diff_equations, initial_condition, integration_settings):
-
-    y_dash, x_dash = diff_equations
+def euler_explicit_2coupled(input_dict, integration_settings):
 
     h, tn, _ = integration_settings
-
     y,x,t = np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1))
 
-
-    y[0], x[0], t[0] = initial_condition[0], initial_condition[1], initial_condition[2]
+    x_dash,y_dash = input_dict["x"]["differential"], input_dict["y"]["differential"]
+    x[0], y[0], t[0] = input_dict["x"]["initial"], input_dict["y"]["initial"], input_dict["t"]["initial"]
 
 
     for i in range(1,len(t)):
@@ -40,49 +37,56 @@ def euler_explicit_2coupled(diff_equations, initial_condition, integration_setti
         x[i] = x[i-1] + h * x_dash(t[i-1], x[i-1], y[i-1])        
         t[i] = t[i-1] + h
 
-    return y,x,t
+    input_dict["x"]["solution"] = x
+    input_dict["y"]["solution"] = y
+    input_dict["t"]["solution"] = t
+
+    return input_dict
 
 
-def euler_explicit_3coupled(diff_equations, initial_condition, integration_settings):
-
-    z_dash, y_dash, x_dash = diff_equations
+def euler_explicit_3coupled(input_dict, integration_settings):
 
     h, tn, _ = integration_settings
-
     z, y ,x ,t = np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1)), np.zeros((int(tn/h)+1))
 
-    z[0], y[0], x[0], t[0] = initial_condition[0], initial_condition[1], initial_condition[2], initial_condition[3]
+    x_dash,y_dash,z_dash = input_dict["x"]["differential"], input_dict["y"]["differential"], input_dict["z"]["differential"]
+    x[0], y[0], z[0], t[0] = input_dict["x"]["initial"], input_dict["y"]["initial"], input_dict["z"]["initial"], input_dict["t"]["initial"]
 
     
     for i in range(1,len(t)):
 
-        z[i] = z[i-1] + h * z_dash(t[i-1], x[i-1], y[i-1], z[i-1])    
+        z[i] = z[i-1] + h * z_dash(t[i-1], x[i-1], y[ i-1], z[i-1])    
         y[i] = y[i-1] + h * y_dash(t[i-1], x[i-1], y[i-1], z[i-1])
         x[i] = x[i-1] + h * x_dash(t[i-1], x[i-1], y[i-1], z[i-1])
         t[i] = t[i-1] + h
 
+    input_dict["x"]["solution"] = x
+    input_dict["y"]["solution"] = y
+    input_dict["z"]["solution"] = z
+    input_dict["t"]["solution"] = t
 
-    return z,y,x,t
+    return input_dict
 
-def euler_explicit(diff_equations, initial_condition, integration_settings):
 
-    if len(diff_equations)==3:
-        solution = euler_explicit_3coupled(diff_equations, initial_condition, integration_settings)
+def euler_explicit(input_dict, integration_settings):
 
-    elif len(diff_equations)==2:
-        solution = euler_explicit_2coupled(diff_equations, initial_condition, integration_settings)
+    if len(input_dict)==4:
+        output_dict = euler_explicit_3coupled(input_dict, integration_settings)
 
-    elif len(diff_equations)==1:
-        solution = euler_explicit_single(diff_equations, initial_condition, integration_settings)
+    elif len(input_dict)==3:
+        output_dict = euler_explicit_2coupled(input_dict, integration_settings)
+
+    elif len(input_dict)==2:
+        output_dict = euler_explicit_single(input_dict, integration_settings)
 
     else:
         print('too many diff equations are coupled')
 
-    return solution
-
+    return output_dict
 
 
 if __name__ == '__main__':
+
 
     rho, sigma, beta = 28, 10, 8/3
 
@@ -95,26 +99,31 @@ if __name__ == '__main__':
     x0 = 0.99 ## Non-zero initial value
     t0 = 0
 
+    input_dict = {
+        "x": {"differential": x_dash, "initial": x0},
+        "y": {"differential": y_dash, "initial": y0},
+        "z": {"differential": z_dash, "initial": z0},
+        "t": {"initial": t0}
+    }
+
     h = 0.01
     tn = 200
     epsilon = 0.1
+    
+    integration_settings = (h, tn, epsilon)
 
-    initial_condition = (z0,y0,x0,t0)
-    diff_equations = (z_dash, y_dash, x_dash)
-    integration_settings = (h,tn, epsilon)
+    output_dict = euler_explicit(input_dict, integration_settings)
 
-    solution = euler_explicit(diff_equations, initial_condition, integration_settings)
+    print(output_dict)
 
-    z, y, x, t = solution
-
-    print(type(z))
+    y = output_dict["y"]["solution"]
+    x = output_dict["x"]["solution"]
+    z = output_dict["z"]["solution"]
+    t = output_dict["t"]["solution"]
 
     fig = plt.figure(figsize=(9, 6))
     ax = fig.add_subplot(111, projection='3d')
     ax.plot(x, y, z)
     plt.show()
-
-
-    # plt.show()
 
 
