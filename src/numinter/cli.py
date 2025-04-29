@@ -46,9 +46,9 @@ def main():
     )
     parser.add_argument("--step", type=float, help=help["step"], default=0.01)
     parser.add_argument("--hs", type=float, help=help["hs"], default=20)
-    parser.add_argument("--epsilon", type=float, default=0.1)
+    parser.add_argument("--epsilon", type=float, default=0.1, help=help["epsilon"])
     parser.add_argument("--save", action="store_true", help=help["save"])
-    parser.add_argument("--savename", type=str, default="unnamed.hdf5")
+    parser.add_argument("--savename", type=str, default="unnamed.csv", help=help["savename"])
     parser.add_argument("--plot", action="store_true", help=help["plot"])
 
     args = parser.parse_args()
@@ -89,7 +89,6 @@ def main():
         input = find_output_file(filename=args.input)
         func = READ_MAP[extension]
         solution = func(input)
-        print(solution)
         if args.plot:
             # plot data
             pass
