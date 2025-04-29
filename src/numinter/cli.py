@@ -1,19 +1,28 @@
 import argparse
 from .parse import parse_setupfile, Path
-from .locate import find_input_file, find_output_file
-from .save_data import save_hdf
+from .locate import find_input_file, find_output_file, find_output_dir
+from .io import save_hdf, save_csv, save_npy, read_npy, read_csv, read_hdf
 from .custom_errors import MethodError
 from .euler_explicit import euler_explicit
 from .euler_implicit import euler_implicit
 import importlib.util
 import sys
+
 # from .plot import plot_data
 
-METHOD_MAP = {"euler_explicit": euler_explicit, "euler_implicit": euler_implicit}
-
+METHOD_MAP = {
+    "euler_explicit": euler_explicit,
+    "euler_implicit": euler_implicit,
+}
 SAVE_MAP = {
-    # "csv": save_csv,
-    ".hdf5": save_hdf
+    ".csv": save_csv,
+    ".hdf5": save_hdf,
+    ".npy": save_npy,
+}
+READ_MAP = {
+    ".csv": read_csv,
+    ".hdf5": read_hdf,
+    ".npy": read_npy
 }
 
 
@@ -63,7 +72,7 @@ def main():
             if args.save:
                 save_format = "." + args.savename.split(".")[-1]
                 if save_format in data_extensions:
-                    outputdir = find_output_file()
+                    outputdir = find_output_dir()
                     filename = outputdir / args.savename
                     func = SAVE_MAP[save_format]
                     func(filename, solution)
@@ -77,7 +86,10 @@ def main():
             )
 
     elif extension in data_extensions:
-        # read data based on extension
+        input = find_output_file(filename=args.input)
+        func = READ_MAP[extension]
+        solution = func(input)
+        print(solution)
         if args.plot:
             # plot data
             pass
