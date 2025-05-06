@@ -17,7 +17,7 @@ def parse_setupfile() -> ConfigParser:
     return setup
 
 
-def parse_yaml(file: Path):
+def parse_system_yaml(file: Path):
     """
     Function to parse yaml files,
     not implemented yet
