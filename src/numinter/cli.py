@@ -92,7 +92,6 @@ def main():
         if args.plot:
             # plot data
             pass
-        pass
     else:
         raise FileNotFoundError(
             f"File {args.input} does not conform to the file extensions \
