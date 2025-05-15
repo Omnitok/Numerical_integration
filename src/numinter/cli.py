@@ -8,7 +8,7 @@ from .euler_implicit import euler_implicit
 import importlib.util
 import sys
 
-# from .plot import plot_data
+from .plot import plot_csv_data, plot_data
 
 METHOD_MAP = {
     "euler_explicit": euler_explicit,
@@ -78,8 +78,7 @@ def main():
                     func(filename, solution)
 
             if args.plot:
-                pass
-                # plot
+                plot_data(solution)
         else:
             raise MethodError(
                 f"{args.method} not implemented. See -h for allowed methods"
@@ -91,7 +90,7 @@ def main():
         solution = func(input)
         if args.plot:
             # plot data
-            pass
+            plot_csv_data(solution)
     else:
         raise FileNotFoundError(
             f"File {args.input} does not conform to the file extensions \
