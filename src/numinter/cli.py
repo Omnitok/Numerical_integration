@@ -1,6 +1,5 @@
 import argparse
 from .parse import Path
-from .locate import find_input_file, find_output_file, find_output_dir
 from .io import save_hdf, save_csv, save_npy, read_npy, read_csv, read_hdf
 from .custom_errors import MethodError
 from .euler_explicit import euler_explicit
@@ -21,42 +20,37 @@ SAVE_MAP = {
 }
 READ_MAP = {".csv": read_csv, ".hdf5": read_hdf, ".npy": read_npy}
 ARG_HELP = {
-    "input ": "Path to input file with equations, constants and initial values.",
-    "plot ": "Plot data",
-    "save ": "Saves integrated data",
-    "method ": "Method, allowed is euler_implicit or euler_explicit",
-    "step ": "Stepsize",
-    "hs ": "End value for step",
-    "savename ": "Filename of the file to save data to. Allowed extensions: .npy, .hdf5, .csv",
-    "eps ": "Error term for implicit Euler",
+    "input": "Path to input file with equations, constants and initial values.",
+    "plot": "Plot data",
+    "save": "Saves integrated data",
+    "method": "Method, allowed is euler_implicit or euler_explicit",
+    "step": "Stepsize",
+    "hs": "End value for step",
+    "savename": "Filename of the file to save data to. Allowed extensions: .npy, .hdf5, .csv",
+    "eps": "Error term for implicit Euler",
 }
 
 
 def main():
-    """
-    TODO:
-    2. Module to handle saving and reading data
-    """
     allowed_methods = ["euler_implicit", "euler_explicit"]
     data_extensions = [".csv", ".hdf5", ".npy"]
     input_extensions = [".py"]
-    help = ARG_HELP
 
     parser = argparse.ArgumentParser(
         add_help=True, description="CLI tool to solve ODEs"
     )
-    parser.add_argument("input", type=str, help=help["input"])
+    parser.add_argument("input", type=str, help=ARG_HELP["input"])
     parser.add_argument(
-        "--method", type=str, help=help["method"], default="euler_explicit"
+        "--method", type=str, help=ARG_HELP["method"], default="euler_explicit"
     )
-    parser.add_argument("--step", type=float, help=help["step"], default=0.01)
-    parser.add_argument("--hs", type=float, help=help["hs"], default=20)
-    parser.add_argument("--epsilon", type=float, default=0.1, help=help["eps"])
-    parser.add_argument("--save", action="store_true", help=help["save"])
+    parser.add_argument("--step", type=float, help=ARG_HELP["step"], default=0.01)
+    parser.add_argument("--hs", type=float, help=ARG_HELP["hs"], default=20)
+    parser.add_argument("--epsilon", type=float, default=0.1, help=ARG_HELP["eps"])
+    parser.add_argument("--save", action="store_true", help=ARG_HELP["save"])
     parser.add_argument(
-        "--savename", type=str, default="unnamed.csv", help=help["savename"]
+        "--savename", type=str, default="unnamed.csv", help=ARG_HELP["savename"]
     )
-    parser.add_argument("--plot", action="store_true", help=help["plot"])
+    parser.add_argument("--plot", action="store_true", help=ARG_HELP["plot"])
 
     args = parser.parse_args()
     input_file = Path(args.input)
@@ -79,10 +73,8 @@ def main():
             if args.save:
                 save_format = "." + args.savename.split(".")[-1]
                 if save_format in data_extensions:
-                    outputdir = find_output_dir()
-                    filename = outputdir / args.savename
                     func = SAVE_MAP[save_format]
-                    func(filename, solution)
+                    func(args.savename, solution)
 
             if args.plot:
                 pass
