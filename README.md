@@ -67,3 +67,5 @@ the input file. The integration method is chosen with the optional argument `--m
 settings are set using the optional arguments `--step` and `--hs`. The optional argument `--plot` 
 plots the solution and `--save` and `--savename` is associated with saving the solution and will 
 be placed in the directory in the current working directory, together with the plot.
+
+![alt text](https://github.com/Omnitok/Numerical_integration/blob/main/example/lorenz.png "Lorenz system example")
