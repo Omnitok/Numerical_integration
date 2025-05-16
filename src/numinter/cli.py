@@ -26,7 +26,7 @@ ARG_HELP = {
     "method": "Method, allowed is euler_implicit or euler_explicit",
     "step": "Stepsize",
     "hs": "End value for step",
-    "savename": "Filename of the file to save data to. Allowed extensions: .npy, .hdf5, .csv",
+    "filename": "Filename of the file to save data to. Allowed extensions: .npy, .hdf5, .csv",
     "eps": "Error term for implicit Euler",
 }
 
@@ -48,7 +48,7 @@ def main():
     parser.add_argument("--epsilon", type=float, default=0.1, help=ARG_HELP["eps"])
     parser.add_argument("--save", action="store_true", help=ARG_HELP["save"])
     parser.add_argument(
-        "--savename", type=str, default="unnamed.csv", help=ARG_HELP["savename"]
+        "--filename", type=str, default="unnamed.csv", help=ARG_HELP["filename"]
     )
     parser.add_argument("--plot", action="store_true", help=ARG_HELP["plot"])
 
@@ -71,13 +71,13 @@ def main():
             solution = func(input, (args.step, args.hs, args.epsilon))
 
             if args.save:
-                save_format = "." + args.savename.split(".")[-1]
+                save_format = "." + args.filename.split(".")[-1]
                 if save_format in data_extensions:
                     func = SAVE_MAP[save_format]
-                    func(args.savename, solution)
+                    func(args.filename, solution)
 
             if args.plot:
-                plot_data(solution, input_file.name.split(".")[0])
+                plot_data(solution, args.filename.split(".")[0])
         else:
             raise MethodError(
                 f"{args.method} not implemented. See -h for allowed methods"
@@ -87,8 +87,7 @@ def main():
         func = READ_MAP[input_extension]
         solution = func(input_file)
         if args.plot:
-            # plot data
-            plot_csv_data(solution, input_file.name.split(".")[0])
+            plot_csv_data(solution, args.filename.split(".")[0])
     else:
         raise FileNotFoundError(
             f"File {args.input} do not conform to the file extensions \

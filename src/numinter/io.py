@@ -100,4 +100,4 @@ def read_npy(filename: Path) -> dict:
         Dictionary with data
     """
     data = np.load(filename, allow_pickle=True)
-    return data
+    return data.item()
