@@ -59,13 +59,22 @@ if you call `numinter -h`.
 Down bellow will some examples usages be shown and explanations of the outputs:
 
 ```bash
-numinter lorenz.py --method euler_implicit --step 0.001 --hs 100 --save --plot --savename lorenz.hdf5
+numinter lorenz.py --method euler_implicit --step 0.001 --hs 100 --save --plot --filename lorenz.hdf5
 ```
 
 In the above example is the system of equations defined in `lorenz.py` and this is given as 
 the input file. The integration method is chosen with the optional argument `--method`. Integration
 settings are set using the optional arguments `--step` and `--hs`. The optional argument `--plot` 
-plots the solution and `--save` and `--savename` is associated with saving the solution and will 
-be placed in the directory in the current working directory, together with the plot.
+plots the solution and `--save` and `--file` is associated with saving the solution and will 
+be placed in the directory in the current working directory, together with the plot:
 
-![alt text](https://github.com/Omnitok/Numerical_integration/blob/main/example/lorenz.png "Lorenz system example")
+<div align="center">
+    ![alt text](https://github.com/Omnitok/Numerical_integration/blob/main/example/lorenz.png "Lorenz system example")
+</div>
+
+Another possibility is to read already calculated data and plot it. The example below show the command to read the 
+saved file `lorenz.hdf5`, that was saved in the first example and save the figure as *lorenz_2.png*
+```bash
+numinter lorenz.hdf5 --plot --filename lorenz_2
+```
+
