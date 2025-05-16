@@ -69,7 +69,7 @@ plots the solution and `--save` and `--file` is associated with saving the solut
 be placed in the directory in the current working directory, together with the plot:
 
 <div align="center">
-    ![alt text](https://github.com/Omnitok/Numerical_integration/blob/main/example/lorenz.png "Lorenz system example")
+    <img src="https://github.com/Omnitok/Numerical_integration/blob/main/example/lorenz.png "Lorenz system example"" alt="Lorenz system example">
 </div>
 
 Another possibility is to read already calculated data and plot it. The example below show the command to read the 
