@@ -77,7 +77,7 @@ def main():
                     func(args.savename, solution)
 
             if args.plot:
-                plot_data(solution)
+                plot_data(solution, input_file.name.split(".")[0])
         else:
             raise MethodError(
                 f"{args.method} not implemented. See -h for allowed methods"
@@ -88,7 +88,7 @@ def main():
         solution = func(input_file)
         if args.plot:
             # plot data
-            plot_csv_data(solution)
+            plot_csv_data(solution, input_file.name.split(".")[0])
     else:
         raise FileNotFoundError(
             f"File {args.input} do not conform to the file extensions \
