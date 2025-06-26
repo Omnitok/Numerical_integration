@@ -8,7 +8,7 @@ def system():
     def pd(t, theta, p): return -m * (l**2) * (w**2) * np.sin(theta)
 
     theta0 = np.pi * 5 / 6
-    p0 = 0
+    p0 = 0 
     t0 = 0
 
     dct = {

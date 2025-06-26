@@ -1,5 +1,5 @@
 import argparse
-from .parse import Path
+from pathlib import Path
 from .io import save_hdf, save_csv, save_npy, read_npy, read_csv, read_hdf
 from .custom_errors import MethodError
 from .euler_explicit import euler_explicit
